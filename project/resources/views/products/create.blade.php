@@ -20,7 +20,7 @@
         </ul>
     @endif
 </div>
-<form method="post" action="{{ route('product.store') }}">
+<form method="post" action="{{ route('holiday.store') }}">
     @csrf {{-- security reasons --}}
     @method('post')
     <div class="form-group row">
@@ -40,23 +40,7 @@
         <p>{{ $message }}</p>
         @enderror
     </div>
-    <div class="form-group row">
-        <label for="email" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <input class="form-control"
-                   type="email"
-                   name="email"
-                   id="email"
-                   placeholder="Email"
-                   value="{{ old('email') }}"
-                   required
-            >
 
-            @error('email')
-            <p>{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
     <div class="form-group row">
         <label for="date_start">Date Start:</label>
         <input type="date"

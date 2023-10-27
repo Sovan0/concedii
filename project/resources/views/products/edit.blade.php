@@ -20,28 +20,24 @@
         </ul>
     @endif
 </div>
-<form method="post" action="{{ route('product.update', ['product' => $product]) }}">
+<form method="post" action="{{ route('holiday.update', ['holiday' => $holiday]) }}">
     @csrf {{-- security reasons --}}
     @method('put')
     <div>
         <label>Name</label>
-        <input type="text" name="name" placeholder="name" value="{{ $product->name }}">
-    </div>
-    <div>
-        <label>Email</label>
-        <input type="text" name="email" placeholder="email" value="{{ $product->email }}">
+        <input type="text" name="name" placeholder="name" value="{{ $holiday->name }}">
     </div>
     <div>
         <label>Date Start</label>
-        <input type="date" name="date_start" placeholder="date_start" value="{{ $product->date_start }}">
+        <input type="date" name="date_start" placeholder="date_start" value="{{ $holiday->date_start }}">
     </div>
     <div>
         <label>Date Stop</label>
-        <input type="date" name="date_stop" placeholder="date_stop" value="{{ $product->date_stop }}">
+        <input type="date" name="date_stop" placeholder="date_stop" value="{{ $holiday->date_stop }}">
     </div>
     <div>
         <label>Description</label>
-        <input type="text" name="description" placeholder="description" value="{{ $product->description }}">
+        <input type="text" name="description" placeholder="description" value="{{ $holiday->description }}">
     </div>
     <div>
         <input type="submit" value="Update" />

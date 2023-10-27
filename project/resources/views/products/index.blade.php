@@ -23,7 +23,6 @@
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
-            <th scope="col">Email</th>
             <th scope="col">Date Start</th>
             <th scope="col">Date Stop</th>
             <th scope="col">Description</th>
@@ -32,19 +31,18 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($products as $product )
+        @foreach($holidays as $holiday )
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->email }}</td>
                 <td>{{ $product->date_start }}</td>
                 <td>{{ $product->date_stop }}</td>
                 <td>{{ $product->description }}</td>
                 <td>
-                    <a href="{{ route('product.edit', ['product' => $product]) }}" class="btn btn-primary">Edit</a>
+                    <a href="{{ route('holiday.edit', ['holiday' => $holiday]) }}" class="btn btn-primary">Edit</a>
                 </td>
                 <td>
-                    <form method="post" action="{{ route('product.delete', ['product' => $product]) }}">
+                    <form method="post" action="{{ route('holiday.delete', ['holiday' => $holiday]) }}">
                         @csrf
                         @method('delete')
                         <input type="submit" class="btn btn-danger" value="Delete"/>
@@ -56,7 +54,7 @@
     </table>
     <br>
     <div>
-        <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
+        <a href="{{ route('holiday.create') }}" class="btn btn-secondary">Create a leave request</a>
     </div>
 </div>
 </body>
