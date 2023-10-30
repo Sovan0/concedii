@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Laravel</title>
+    <title>Holidays</title>
 </head>
+@include('components.header')
 <body>
+<br>
 <h1>Holiday</h1>
 <br>
 <div>
@@ -17,7 +19,7 @@
         </div>
     @endif
 </div>
-<div>
+<div class="ml-5 mr-5">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -31,7 +33,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($holidays as $holiday )
+        @foreach($products as $product )
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
@@ -39,10 +41,10 @@
                 <td>{{ $product->date_stop }}</td>
                 <td>{{ $product->description }}</td>
                 <td>
-                    <a href="{{ route('holiday.edit', ['holiday' => $holiday]) }}" class="btn btn-primary">Edit</a>
+                    <a href="{{ route('product.edit', ['product' => $product]) }}" class="btn btn-primary">Edit</a>
                 </td>
                 <td>
-                    <form method="post" action="{{ route('holiday.delete', ['holiday' => $holiday]) }}">
+                    <form method="post" action="{{ route('product.delete', ['product' => $product]) }}">
                         @csrf
                         @method('delete')
                         <input type="submit" class="btn btn-danger" value="Delete"/>
@@ -54,7 +56,7 @@
     </table>
     <br>
     <div>
-        <a href="{{ route('holiday.create') }}" class="btn btn-secondary">Create a leave request</a>
+        <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
     </div>
 </div>
 </body>

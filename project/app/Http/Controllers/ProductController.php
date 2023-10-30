@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Holiday;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class HolidayController extends Controller
+class ProductController extends Controller
 {
     public function index() {
-        $holidays = Holiday::all();
-
-        return view('holidays.index', ['holidays' => $holidays]);
+        $products = Product::all();
+        return view('products.index', ['products' => $products]);
     }
 
     public function create() {
-        return view('holidays.create');
+        return view('products.create');
     }
 
     public function store(Request $request) {
@@ -25,16 +24,16 @@ class HolidayController extends Controller
             'description' => 'required',
         ]);
 
-        $newHoliday = Holiday::create($data);
+        $newHoliday = Product::create($data);
 
-        return redirect(route('holidays.index'));
+        return redirect(route('product.index'));
     }
 
-    public function edit(Holiday $product) {
+    public function edit(Product $product) {
         return view('products.edit', ['product' => $product]);
     }
 
-    public function update(Holiday $product, Request $request) {
+    public function update(Product $product, Request $request) {
         $data = $request->validate([
             'name' => 'required',
             'email' => 'required',
@@ -45,10 +44,10 @@ class HolidayController extends Controller
 
         $product -> update($data);
 
-        return redirect(route('product.index'))->with('susccess', 'Product Updated Succesffully');
+        return redirect(route('products.index'))->with('susccess', 'Product Updated Succesffully');
     }
 
-    public function delete(Holiday $product) {
+    public function delete(Product $product) {
         $product->delete();
 
         return redirect(route('product.index'))->with('susccess', 'Product deleted Succesffully');

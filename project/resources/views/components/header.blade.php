@@ -10,17 +10,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
-                    <div>
-                        <form method="GET" action="/product">
-                            <button type="submit" class="btn btn-info">Holiday</button>
-                        </form>
-                    </div>
-{{--                    <form method="GET" action="/holiday">--}}
-{{--                        <a class="nav-link" href="{{ route('holidays.index') }}">Holiday</a>--}}
-{{--                    </form>--}}
-{{--                    <form method="GET" action="/holiday">--}}
-{{--                        <button type="submit" class="btn btn-info">Holiday</button>--}}
-{{--                    </form>--}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                     </li>
