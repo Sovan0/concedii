@@ -24,7 +24,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col">ID</th>
+{{--            <th scope="col">ID</th>--}}
             <th scope="col">Name</th>
             <th scope="col">Date Start</th>
             <th scope="col">Date Stop</th>
@@ -39,7 +39,7 @@
         {{--        @if(Auth::user()->id == $id)--}}
         @foreach($products as $product)
             <tr>
-                <td>{{ $product->id }}</td>
+{{--                <td>{{ $product->id }}</td>--}}
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->date_start }}</td>
                 <td>{{ $product->date_stop }}</td>

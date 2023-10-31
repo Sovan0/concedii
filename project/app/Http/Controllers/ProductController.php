@@ -33,7 +33,9 @@ class ProductController extends Controller
             'date_stop' => 'required',
             'description' => 'required',
         ]);
+
         $data['user_id'] = $userId->id;
+
         $newProduct = Product::create($data);
 
         return redirect(route('product.index'));

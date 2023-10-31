@@ -9,6 +9,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Create holiday</title>
+
 </head>
 <body>
 @include('components.header')
@@ -46,7 +47,7 @@
         </div>
 
         <div class="form-group row">
-            <label for="date_start">Date Start:</label>
+            <label class="col-sm-2 col-form-label" for="date_start">Date Start:</label>
             <div class="col-sm-10">
                 <input type="date"
                        id="date_start"
@@ -60,7 +61,7 @@
             @enderror
         </div>
         <div class="form-group row">
-            <label for="date_stop">Date Stop:</label>
+            <label class="col-sm-2 col-form-label" for="date_stop">Date Stop:</label>
             <div class="col-sm-10">
                 <input type="date"
                        id="date_stop"
@@ -98,4 +99,4 @@
     </div>
 </form>
 </body>
-
+</html>

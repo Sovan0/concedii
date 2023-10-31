@@ -9,8 +9,50 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Edit</title>
+    <script>
+        window.onload = function() {
+            // date_start
+            function convertDateStart(dateStart) {
+                var inputDateObj = new Date(dateStart);
+                var year = inputDateObj.getFullYear();
+                var month = String(inputDateObj.getMonth() + 1).padStart(2, '0');
+                var day = String(inputDateObj.getDate()).padStart(2, '0');
+                var formattedDateStart = year + '-' + month + '-' + day;
+                return formattedDateStart;
+            }
+
+            var inputDateStart = "{{ $product->date_start }}";
+            var formattedDateStart = convertDateStart(inputDateStart);
+            console.log(formattedDateStart);
+
+            var inputDateElementStart = document.getElementById("date_start");
+            if (inputDateElementStart) {
+                inputDateElementStart.value = formattedDateStart;
+            }
+
+            // date_stop
+            function convertDateStop(dateStop) {
+                var inputDateObj = new Date(dateStop);
+                var year = inputDateObj.getFullYear();
+                var month = String(inputDateObj.getMonth() + 1).padStart(2, '0');
+                var day = String(inputDateObj.getDate()).padStart(2, '0');
+                var formattedDateStop = year + '-' + month + '-' + day;
+                return formattedDateStop;
+            }
+
+            var inputDateStop = "{{ $product->date_stop }}";
+            var formattedDateStop = convertDateStop(inputDateStop);
+            console.log(formattedDateStop);
+
+            var inputDateElementStop = document.getElementById("date_stop");
+            if (inputDateElementStop) {
+                inputDateElementStop.value = formattedDateStop;
+            }
+        }
+    </script>
 </head>
 <body>
+{{--@dd(gettype($product->date_start));--}}
 @include('components.header')
 <h1>Edit a Product</h1>
 <div>
@@ -41,23 +83,23 @@
         </div>
 
         <div class="form-group row">
-            <label for="date_start">Date Start:</label>
+            <label class="col-sm-2 col-form-label" for="date_start">Date Start:</label>
             <div class="col-sm-10">
                 <input type="date"
                        id="date_start"
                        name="date_start"
-                       value="{{ $product->date_start }}"
+{{--                       value="{{ $product->date_start }}"--}}
                        required
                 >
             </div>
         </div>
         <div class="form-group row">
-            <label for="date_stop">Date Stop:</label>
+            <label class="col-sm-2 col-form-label" for="date_stop">Date Stop:</label>
             <div class="col-sm-10">
                 <input type="date"
                        id="date_stop"
                        name="date_stop"
-                       value="{{ $product->date_stop }}"
+{{--                       value="{{ $product->date_stop }}"--}}
                        required
                 >
             </div>
