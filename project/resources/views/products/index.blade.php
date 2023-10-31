@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Holidays</title>
 </head>
@@ -33,7 +34,10 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($products as $product )
+        {{--        @foreach($users as $user)--}}
+        {{--            {{ $user->id }}--}}
+        {{--        @if(Auth::user()->id == $id)--}}
+        @foreach($products as $product)
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
@@ -52,12 +56,13 @@
                 </td>
             </tr>
         @endforeach
+        {{--        @endif--}}
         </tbody>
     </table>
     <br>
-    <div>
-        <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
-    </div>
+        <div>
+            <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
+        </div>
 </div>
 </body>
 </html>

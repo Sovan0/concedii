@@ -13,7 +13,8 @@
 <body>
 @include('components.header')
 <h1>Create a Product</h1>
-<form method="post" action="{{ route('product.store') }}">
+{{--<form method="post" action="{{ route('product.store') }}">--}}
+<form method="post" action="/product">
     <div>
         @if($errors->any())
             <ul>
@@ -91,16 +92,10 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">Take</button>
             </div>
         </div>
     </div>
 </form>
 </body>
-
-
-
-
-
-
 

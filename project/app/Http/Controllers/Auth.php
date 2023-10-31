@@ -25,15 +25,17 @@ class Auth extends Controller
     }
 
     function registrationPost(Request $request) {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
+            'role' => 'required',
         ]);
 
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['password'] = Hash::make($request->password);
+//        $data['name'] = $request->name;
+//        $data['email'] = $request->email;
+//        $data['password'] = Hash::make($request->password);
+//        $data['role'] = $request->role;
 
         $user = User::create($data);
 
