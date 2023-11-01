@@ -10,6 +10,34 @@
 
     <title>Create holiday</title>
 
+    <script>
+        window.onload = function() {
+            var dateStartInput = document.getElementById('date_start');
+            var dateStopInput = document.getElementById('date_stop');
+
+            dateStartInput.min = new Date().toISOString().split('T')[0];
+
+            dateStartInput.addEventListener('change', function() {
+                var selectedStartDate = new Date(dateStartInput.value);
+
+                dateStopInput.min = selectedStartDate.toISOString().split('T')[0];
+
+                var selectedStopDate = new Date(dateStopInput.value);
+                if (selectedStopDate < selectedStartDate) {
+                    dateStopInput.value = dateStartInput.value;
+                }
+            });
+
+            dateStopInput.addEventListener('change', function() {
+                var selectedStartDate = new Date(dateStartInput.value);
+                var selectedStopDate = new Date(dateStopInput.value);
+
+                if (selectedStopDate < selectedStartDate) {
+                    dateStopInput.value = dateStartInput.value;
+                }
+            });
+        };
+    </script>
 </head>
 <body>
 @include('components.header')
