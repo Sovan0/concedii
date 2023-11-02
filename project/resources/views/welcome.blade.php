@@ -9,12 +9,9 @@
             <br><br>
             <a type="submit" class="btn btn-info" href="{{ route('product.index') }}">Show me holidays</a>
         @else
-            <br>
-            <div>
-                <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
-            </div>
             <span>Welcome, {{ auth()->user()->name }}</span>
-            <br>
+            <br />
+            <br />
             <div>
                 <a type="submit" class="btn btn-info" href="{{ route('product.create') }}">Take holiday</a>
             </div>

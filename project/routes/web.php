@@ -34,4 +34,3 @@ Route::delete('/product/{product}/delete', [ProductController::class, 'delete'])
 
 
 Route::get('/test', [ProductController::class, 'getUserId']);
-

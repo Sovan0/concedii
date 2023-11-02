@@ -20,22 +20,67 @@
             dateStartInput.addEventListener('change', function() {
                 var selectedStartDate = new Date(dateStartInput.value);
 
+                var selectedStartDay = selectedStartDate.getDay();
+
+                if (selectedStartDay === 0 || selectedStartDay === 6 || isZiLibera(selectedStartDate)) {
+                    dateStartInput.value = '';
+                    dateStopInput.value = '';
+                    alert('1. Selection of this date is not allowed.');
+                    return;
+                }
+
                 dateStopInput.min = selectedStartDate.toISOString().split('T')[0];
 
                 var selectedStopDate = new Date(dateStopInput.value);
-                if (selectedStopDate < selectedStartDate) {
-                    dateStopInput.value = dateStartInput.value;
+                var selectedStopDay = selectedStopDate.getDay();
+
+                if (selectedStopDay === 0 || selectedStopDay === 6 || isZiLibera(selectedStopDate)) {
+                    dateStopInput.value = '';
+                    alert('2. Selection of this date is not allowed.');
                 }
             });
 
             dateStopInput.addEventListener('change', function() {
                 var selectedStartDate = new Date(dateStartInput.value);
                 var selectedStopDate = new Date(dateStopInput.value);
+                var selectedStopDay = selectedStopDate.getDay();
 
-                if (selectedStopDate < selectedStartDate) {
+                if (selectedStopDay === 0 || selectedStopDay === 6 || isZiLibera(selectedStopDate)) {
+                    dateStopInput.value = '';
+                    alert('3. Selection of this date is not allowed.');
+                } else if (selectedStopDate < selectedStartDate) {
                     dateStopInput.value = dateStartInput.value;
                 }
             });
+
+            function isZiLibera(data) {
+                var zileLibere = [
+                    [30, 10],
+                    [1, 11],
+                    [25, 11],
+                    [26, 11],
+                ];
+
+                var selectedStartDate = new Date(dateStartInput.value);
+                var selectedStopDate = new Date(dateStopInput.value);
+
+                var dayStart = selectedStartDate.getDate();
+                var monthStart = selectedStartDate.getMonth();
+
+                var dayStop = selectedStopDate.getDate();
+                var monthStop = selectedStopDate.getMonth();
+
+                var arrayDateStart = [dayStart, monthStart];
+                var arrayDateStop = [dayStop, monthStop];
+
+                for (var i = 0; i < zileLibere.length; i++) {
+                    if (JSON.stringify(arrayDateStart) === JSON.stringify(zileLibere[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(zileLibere[i])) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         };
     </script>
 </head>

@@ -39,14 +39,14 @@
                 <label class="form-label">Password</label>
                 <input type="password" class="form-control" name="password">
             </div>
-            <div class="mb-3">
-                <label for="role">User or Admin</label>
+{{--            <div class="mb-3">--}}
+{{--                <label for="role">User or Admin</label>--}}
 
-                <select name="role" id="role">
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                </select>
-            </div>
+{{--                <select name="role" id="role">--}}
+{{--                    <option value="admin">Admin</option>--}}
+{{--                    <option value="user">User</option>--}}
+{{--                </select>--}}
+{{--            </div>--}}
             <button type="submit" class="btn btn-primary">Registration</button>
         </form>
     </div>

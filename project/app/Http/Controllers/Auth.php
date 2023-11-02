@@ -29,7 +29,7 @@ class Auth extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            'role' => 'required',
+//            'role' => 'required',
         ]);
 
 //        $data['name'] = $request->name;

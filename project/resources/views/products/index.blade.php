@@ -13,6 +13,7 @@
 <br>
 <h1>Holiday</h1>
 <br>
+@if(auth()->user()->role === 'admin')
 <div>
     @if(session()->has('success'))
         <div>
@@ -24,7 +25,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-{{--            <th scope="col">ID</th>--}}
+            <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Date Start</th>
             <th scope="col">Date Stop</th>
@@ -39,7 +40,7 @@
         {{--        @if(Auth::user()->id == $id)--}}
         @foreach($products as $product)
             <tr>
-{{--                <td>{{ $product->id }}</td>--}}
+                <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->date_start }}</td>
                 <td>{{ $product->date_stop }}</td>
@@ -64,5 +65,58 @@
             <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
         </div>
 </div>
+@else
+    <div>
+        @if(session()->has('success'))
+            <div>
+                {{session('success')}}
+            </div>
+        @endif
+    </div>
+    <div class="ml-5 mr-5">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                {{--            <th scope="col">ID</th>--}}
+                <th scope="col">Name</th>
+                <th scope="col">Date Start</th>
+                <th scope="col">Date Stop</th>
+                <th scope="col">Description</th>
+                <th scope="col">Edit</th>
+{{--                <th scope="col">Delete</th>--}}
+            </tr>
+            </thead>
+            <tbody>
+            {{--        @foreach($users as $user)--}}
+            {{--            {{ $user->id }}--}}
+            {{--        @if(Auth::user()->id == $id)--}}
+            @foreach($products as $product)
+                <tr>
+                    {{--                <td>{{ $product->id }}</td>--}}
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->date_start }}</td>
+                    <td>{{ $product->date_stop }}</td>
+                    <td>{{ $product->description }}</td>
+                    <td>
+                        <a href="{{ route('product.edit', ['product' => $product]) }}" class="btn btn-primary">Edit</a>
+                    </td>
+{{--                    <td>--}}
+{{--                        <form method="post" action="{{ route('product.delete', ['product' => $product]) }}">--}}
+{{--                            @csrf--}}
+{{--                            @method('delete')--}}
+{{--                            <input type="submit" class="btn btn-danger" value="Delete"/>--}}
+{{--                        </form>--}}
+{{--                    </td>--}}
+                </tr>
+            @endforeach
+            {{--        @endif--}}
+            </tbody>
+        </table>
+        <br>
+        <div>
+            <a href="{{ route('product.create') }}" class="btn btn-secondary">Create a leave request</a>
+        </div>
+    </div>
+@endauth
 </body>
 </html>
