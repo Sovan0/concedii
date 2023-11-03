@@ -33,7 +33,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($products as $product)
+            @foreach($searched_items as $product)
                 <tr>
                     <td>{{ $product->name }}</td>
                     <td>{{  date('Y-m-d',strtotime($product->date_start)) }}</td>
@@ -78,7 +78,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($products as $product)
+            @foreach($searched_items as $product)
                 <tr>
                     <td>{{ $product->name }}</td>
                     <td>{{  date('Y-m-d',strtotime($product->date_start)) }}</td>
@@ -100,7 +100,7 @@
 
 <br/>
 <div class="paginate">
-    {!! $products->links() !!}
+    {!! $searched_items->appends(['query' => request('query')])->links() !!}
 </div>
 
 </body>

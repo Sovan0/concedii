@@ -33,4 +33,5 @@ Route::put('/product/{product}/update', [ProductController::class, 'update'])->n
 Route::delete('/product/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
 
 
+Route::get('/search', [ProductController::class, 'search'])->name('products.search');
 Route::get('/test', [ProductController::class, 'getUserId']);

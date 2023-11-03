@@ -11,7 +11,6 @@
     <title>Edit</title>
     <script>
         window.onload = function() {
-            // date_start
             function convertDateStart(dateStart) {
                 var inputDateObj = new Date(dateStart);
                 var year = inputDateObj.getFullYear();
@@ -23,14 +22,12 @@
 
             var inputDateStart = "{{ $product->date_start }}";
             var formattedDateStart = convertDateStart(inputDateStart);
-            // console.log(formattedDateStart);
 
             var inputDateElementStart = document.getElementById("date_start");
             if (inputDateElementStart) {
                 inputDateElementStart.value = formattedDateStart;
             }
 
-            // date_stop
             function convertDateStop(dateStop) {
                 var inputDateObj = new Date(dateStop);
                 var year = inputDateObj.getFullYear();
@@ -40,18 +37,19 @@
                 return formattedDateStop;
             }
 
-
-            // --------------------------------------
-
-
             var inputDateStop = "{{ $product->date_stop }}";
             var formattedDateStop = convertDateStop(inputDateStop);
-            // console.log(formattedDateStop);
 
             var inputDateElementStop = document.getElementById("date_stop");
             if (inputDateElementStop) {
                 inputDateElementStop.value = formattedDateStop;
             }
+
+
+
+            // --------------------------------------
+
+
 
             var dateStartInput = document.getElementById('date_start');
             var dateStopInput = document.getElementById('date_stop');
@@ -63,9 +61,9 @@
 
                 var selectedStartDay = selectedStartDate.getDay();
 
-                if (selectedStartDay === 0 || selectedStartDay === 6 || isZiLibera(selectedStartDate)) {
+                if (selectedStartDay === 0 || selectedStartDay === 6 || isFreeDay(selectedStartDate)) {
                     dateStartInput.value = '';
-                    dateStopInput.value = '';
+                    // dateStopInput.value = '';
                     alert('1. Selection of this date is not allowed.');
                     return;
                 }
@@ -75,7 +73,7 @@
                 var selectedStopDate = new Date(dateStopInput.value);
                 var selectedStopDay = selectedStopDate.getDay();
 
-                if (selectedStopDay === 0 || selectedStopDay === 6 || isZiLibera(selectedStopDate)) {
+                if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
                     dateStopInput.value = '';
                     alert('2. Selection of this date is not allowed.');
                 }
@@ -86,7 +84,7 @@
                 var selectedStopDate = new Date(dateStopInput.value);
                 var selectedStopDay = selectedStopDate.getDay();
 
-                if (selectedStopDay === 0 || selectedStopDay === 6 || isZiLibera(selectedStopDate)) {
+                if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
                     dateStopInput.value = '';
                     alert('3. Selection of this date is not allowed.');
                 } else if (selectedStopDate < selectedStartDate) {
@@ -94,8 +92,8 @@
                 }
             });
 
-            function isZiLibera(data) {
-                var zileLibere = [
+            function isFreeDay(data) {
+                var freeDays = [
                     [30, 10],
                     [1, 11],
                     [25, 11],
@@ -114,8 +112,8 @@
                 var arrayDateStart = [dayStart, monthStart];
                 var arrayDateStop = [dayStop, monthStop];
 
-                for (var i = 0; i < zileLibere.length; i++) {
-                    if (JSON.stringify(arrayDateStart) === JSON.stringify(zileLibere[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(zileLibere[i])) {
+                for (var i = 0; i < freeDays.length; i++) {
+                    if (JSON.stringify(arrayDateStart) === JSON.stringify(freeDays[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(freeDays[i])) {
                         return true;
                     }
                 }
@@ -142,19 +140,19 @@
     @csrf {{-- security reasons --}}
     @method('put')
     <div class="ml-5 mr-5">
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="name">Name</label>
-            <div class="col-sm-10">
-                <input class="form-control"
-                       type="text"
-                       name="name"
-                       id="name"
-                       value="{{ $product->name }}"
-                       placeholder="Name"
-                       required
-                >
-            </div>
-        </div>
+{{--        <div class="form-group row">--}}
+{{--            <label class="col-sm-2 col-form-label" for="name">Name</label>--}}
+{{--            <div class="col-sm-10">--}}
+{{--                <input class="form-control"--}}
+{{--                       type="text"--}}
+{{--                       name="name"--}}
+{{--                       id="name"--}}
+{{--                       value="{{ $product->name }}"--}}
+{{--                       placeholder="Name"--}}
+{{--                       required--}}
+{{--                >--}}
+{{--            </div>--}}
+{{--        </div>--}}
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="date_start">Date Start:</label>
@@ -194,7 +192,11 @@
         <div class="form-group row">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary" value="Update">Update</button>
-                {{--                <input type="submit" value="Update" />--}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancel</button>
             </div>
         </div>
     </div>

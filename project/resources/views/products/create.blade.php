@@ -22,7 +22,7 @@
 
                 var selectedStartDay = selectedStartDate.getDay();
 
-                if (selectedStartDay === 0 || selectedStartDay === 6 || isZiLibera(selectedStartDate)) {
+                if (selectedStartDay === 0 || selectedStartDay === 6 || isFreeDay(selectedStartDate)) {
                     dateStartInput.value = '';
                     dateStopInput.value = '';
                     alert('1. Selection of this date is not allowed.');
@@ -34,7 +34,7 @@
                 var selectedStopDate = new Date(dateStopInput.value);
                 var selectedStopDay = selectedStopDate.getDay();
 
-                if (selectedStopDay === 0 || selectedStopDay === 6 || isZiLibera(selectedStopDate)) {
+                if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
                     dateStopInput.value = '';
                     alert('2. Selection of this date is not allowed.');
                 }
@@ -45,7 +45,7 @@
                 var selectedStopDate = new Date(dateStopInput.value);
                 var selectedStopDay = selectedStopDate.getDay();
 
-                if (selectedStopDay === 0 || selectedStopDay === 6 || isZiLibera(selectedStopDate)) {
+                if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
                     dateStopInput.value = '';
                     alert('3. Selection of this date is not allowed.');
                 } else if (selectedStopDate < selectedStartDate) {
@@ -53,8 +53,8 @@
                 }
             });
 
-            function isZiLibera(data) {
-                var zileLibere = [
+            function isFreeDay(data) {
+                var freeDays = [
                     [30, 10],
                     [1, 11],
                     [25, 11],
@@ -73,8 +73,8 @@
                 var arrayDateStart = [dayStart, monthStart];
                 var arrayDateStop = [dayStop, monthStop];
 
-                for (var i = 0; i < zileLibere.length; i++) {
-                    if (JSON.stringify(arrayDateStart) === JSON.stringify(zileLibere[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(zileLibere[i])) {
+                for (var i = 0; i < freeDays.length; i++) {
+                    if (JSON.stringify(arrayDateStart) === JSON.stringify(freeDays[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(freeDays[i])) {
                         return true;
                     }
                 }
@@ -87,7 +87,6 @@
 <body>
 @include('components.header')
 <h1>Create a Product</h1>
-{{--<form method="post" action="{{ route('product.store') }}">--}}
 <form method="post" action="/product">
     <div>
         @if($errors->any())
@@ -101,23 +100,23 @@
     @csrf
     @method('post')
     <div class="ml-5 mr-5">
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="name">Name</label>
-            <div class="col-sm-10">
-                <input class="form-control"
-                       type="text"
-                       name="name"
-                       id="name"
-                       value="{{ old('name') }}"
-                       placeholder="Name"
-                       required
-                >
-            </div>
+{{--        <div class="form-group row">--}}
+{{--            <label class="col-sm-2 col-form-label" for="name">Name</label>--}}
+{{--            <div class="col-sm-10">--}}
+{{--                <input class="form-control"--}}
+{{--                       type="text"--}}
+{{--                       name="name"--}}
+{{--                       id="name"--}}
+{{--                       value="{{ old('name') }}"--}}
+{{--                       placeholder="Name"--}}
+{{--                       required--}}
+{{--                >--}}
+{{--            </div>--}}
 
-            @error('name')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
+{{--            @error('name')--}}
+{{--                <p>{{ $message }}</p>--}}
+{{--            @enderror--}}
+{{--        </div>--}}
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="date_start">Date Start:</label>
