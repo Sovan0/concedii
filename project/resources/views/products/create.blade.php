@@ -7,82 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <title>Create holiday</title>
-
-    <script>
-        window.onload = function() {
-            var dateStartInput = document.getElementById('date_start');
-            var dateStopInput = document.getElementById('date_stop');
-
-            dateStartInput.min = new Date().toISOString().split('T')[0];
-
-            dateStartInput.addEventListener('change', function() {
-                var selectedStartDate = new Date(dateStartInput.value);
-
-                var selectedStartDay = selectedStartDate.getDay();
-
-                if (selectedStartDay === 0 || selectedStartDay === 6 || isFreeDay(selectedStartDate)) {
-                    dateStartInput.value = '';
-                    dateStopInput.value = '';
-                    alert('1. Selection of this date is not allowed.');
-                    return;
-                }
-
-                dateStopInput.min = selectedStartDate.toISOString().split('T')[0];
-
-                var selectedStopDate = new Date(dateStopInput.value);
-                var selectedStopDay = selectedStopDate.getDay();
-
-                if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
-                    dateStopInput.value = '';
-                    alert('2. Selection of this date is not allowed.');
-                }
-            });
-
-            dateStopInput.addEventListener('change', function() {
-                var selectedStartDate = new Date(dateStartInput.value);
-                var selectedStopDate = new Date(dateStopInput.value);
-                var selectedStopDay = selectedStopDate.getDay();
-
-                if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
-                    dateStopInput.value = '';
-                    alert('3. Selection of this date is not allowed.');
-                } else if (selectedStopDate < selectedStartDate) {
-                    dateStopInput.value = dateStartInput.value;
-                }
-            });
-
-            function isFreeDay(data) {
-                var freeDays = [
-                    [30, 10],
-                    [1, 11],
-                    [25, 11],
-                    [26, 11],
-                ];
-
-                var selectedStartDate = new Date(dateStartInput.value);
-                var selectedStopDate = new Date(dateStopInput.value);
-
-                var dayStart = selectedStartDate.getDate();
-                var monthStart = selectedStartDate.getMonth();
-
-                var dayStop = selectedStopDate.getDate();
-                var monthStop = selectedStopDate.getMonth();
-
-                var arrayDateStart = [dayStart, monthStart];
-                var arrayDateStop = [dayStop, monthStop];
-
-                for (var i = 0; i < freeDays.length; i++) {
-                    if (JSON.stringify(arrayDateStart) === JSON.stringify(freeDays[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(freeDays[i])) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        };
-    </script>
 </head>
 <body>
 @include('components.header')
@@ -100,24 +25,6 @@
     @csrf
     @method('post')
     <div class="ml-5 mr-5">
-{{--        <div class="form-group row">--}}
-{{--            <label class="col-sm-2 col-form-label" for="name">Name</label>--}}
-{{--            <div class="col-sm-10">--}}
-{{--                <input class="form-control"--}}
-{{--                       type="text"--}}
-{{--                       name="name"--}}
-{{--                       id="name"--}}
-{{--                       value="{{ old('name') }}"--}}
-{{--                       placeholder="Name"--}}
-{{--                       required--}}
-{{--                >--}}
-{{--            </div>--}}
-
-{{--            @error('name')--}}
-{{--                <p>{{ $message }}</p>--}}
-{{--            @enderror--}}
-{{--        </div>--}}
-
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="date_start">Date Start:</label>
             <div class="col-sm-10">
@@ -170,5 +77,78 @@
         </div>
     </div>
 </form>
+<script>
+    window.onload = function() {
+        var dateStartInput = document.getElementById('date_start');
+        var dateStopInput = document.getElementById('date_stop');
+
+        dateStartInput.min = new Date().toISOString().split('T')[0];
+
+        dateStartInput.addEventListener('change', function() {
+            var selectedStartDate = new Date(dateStartInput.value);
+
+            var selectedStartDay = selectedStartDate.getDay();
+
+            if (selectedStartDay === 0 || selectedStartDay === 6 || isFreeDay(selectedStartDate)) {
+                dateStartInput.value = '';
+                dateStopInput.value = '';
+                alert('1. Selection of this date is not allowed.');
+                return;
+            }
+
+            dateStopInput.min = selectedStartDate.toISOString().split('T')[0];
+
+            var selectedStopDate = new Date(dateStopInput.value);
+            var selectedStopDay = selectedStopDate.getDay();
+
+            if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
+                dateStopInput.value = '';
+                alert('2. Selection of this date is not allowed.');
+            }
+        });
+
+        dateStopInput.addEventListener('change', function() {
+            var selectedStartDate = new Date(dateStartInput.value);
+            var selectedStopDate = new Date(dateStopInput.value);
+            var selectedStopDay = selectedStopDate.getDay();
+
+            if (selectedStopDay === 0 || selectedStopDay === 6 || isFreeDay(selectedStopDate)) {
+                dateStopInput.value = '';
+                alert('3. Selection of this date is not allowed.');
+            } else if (selectedStopDate < selectedStartDate) {
+                dateStopInput.value = dateStartInput.value;
+            }
+        });
+
+        function isFreeDay(data) {
+            var freeDays = [
+                [30, 10],
+                [1, 11],
+                [25, 11],
+                [26, 11],
+            ];
+
+            var selectedStartDate = new Date(dateStartInput.value);
+            var selectedStopDate = new Date(dateStopInput.value);
+
+            var dayStart = selectedStartDate.getDate();
+            var monthStart = selectedStartDate.getMonth();
+
+            var dayStop = selectedStopDate.getDate();
+            var monthStop = selectedStopDate.getMonth();
+
+            var arrayDateStart = [dayStart, monthStart];
+            var arrayDateStop = [dayStop, monthStop];
+
+            for (var i = 0; i < freeDays.length; i++) {
+                if (JSON.stringify(arrayDateStart) === JSON.stringify(freeDays[i]) || JSON.stringify(arrayDateStop) === JSON.stringify(freeDays[i])) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    };
+</script>
 </body>
 </html>

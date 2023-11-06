@@ -13,7 +13,7 @@
             <br />
             <br />
             <div>
-                <a type="submit" class="btn btn-info" href="{{ route('product.create') }}">Take holiday</a>
+                <a type="submit" class="btn btn-primary" href="{{ route('product.create') }}">Take</a>
             </div>
         @endif
     @else
