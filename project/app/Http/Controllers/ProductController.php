@@ -12,16 +12,34 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        if(auth()->user()->role === 'admin') {
-            $products = Product::orderBy('date_start', 'asc')->paginate(3);
-        } else {
-            $products = Product::where('user_id', auth()->user()->id)
-                ->orderBy('date_start', 'asc')
-                ->paginate(3);
+        $query = Product::query();
+
+        if (auth()->user()->role !== 'admin') {
+            $query->where('user_id', auth()->user()->id);
         }
-        return view('products.index', ['products' => $products]);
+
+        if (session()->has('start_date')) {
+            $query->where('date_start', '>=', session('start_date'));
+        }
+
+        if (session()->has('end_date')) {
+            $query->where('date_stop', '<=', session('end_date'));
+        }
+
+        if (session()->has('search_query')) {
+            $query->whereRaw("name LIKE '%" . session('search_query') . "%'");
+        }
+
+        $products = $query->orderBy('date_start', 'asc')->paginate(3);
+
+        return view('products.index', [
+            'products' => $products,
+            'start_date' => session('start_date'),
+            'end_date' => session('end_date'),
+            'search_query' => session('search_query'),
+        ]);
     }
 
     public function create(Product $product)
@@ -81,20 +99,11 @@ class ProductController extends Controller
         dd($userId->id);
     }
 
-//    public function search(Request $request) {
-//        $query = $request->input('query');
-//        session(['search_query' => $query]);
-//
-//        $searched_items = Product::where('name', 'like', "%$query%")->paginate(3);
-//
-//        return view('products.search', compact('searched_items'));
-//    }
-
     public function search(Request $request) {
         $query = $request->input('query');
+        session(['search_query' => $query]);
 
-        $searched_items = Product::whereRaw("name LIKE '%$query%'")
-            ->paginate(3);
+        $searched_items = Product::whereRaw("name LIKE '%$query%'")->paginate(3);
 
         return view('products.search', compact('searched_items'));
     }

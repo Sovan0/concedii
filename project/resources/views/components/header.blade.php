@@ -9,14 +9,14 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 @auth
                     @if(auth()->user()->role === 'admin')
+{{--                        <li class="nav-item">--}}
+{{--                            <form class="form-inline my-2 my-lg-0" action="{{ route('products.search') }}" method="GET">--}}
+{{--                                <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" name="query">--}}
+{{--                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>--}}
+{{--                            </form>--}}
+{{--                        </li>--}}
                         <li class="nav-item">
-                            <form class="form-inline my-2 my-lg-0" action="{{ route('products.search') }}" method="GET">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" name="query">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                            </form>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Admin's Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">{{ auth()->user()->name }} Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('logout') }}">Logout</a>

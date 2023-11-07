@@ -11,7 +11,7 @@
 @include('components.header')
 <body>
 <br>
-<h1>Holiday</h1>
+<h1>The table with holidays</h1>
 <br>
 @if(auth()->user()->role === 'admin')
     <div>
@@ -22,6 +22,30 @@
         @endif
     </div>
     <div class="ml-5 mr-5">
+        <div class="row pb-3 d-flex align-items-center justify-content-center">
+            <form class="form-inline my-2 my-lg-0" action="{{ route('products.search') }}" method="GET">
+                <div class="row pt-3 pb-3 pr-4">
+                    <input class="form-control mr-sm-2" type="search" id="searchName" placeholder="Search..." aria-label="Search" name="query" value="{{ session('search_query') ?? '' }}">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </div>
+            </form>
+            <form method="GET" action="{{ route('products.index') }}">
+                <div class="row pt-3 pb-3">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <label class="mt-2 mr-2"> Start Date: </label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" value="{{ $start_date ?? '' }}">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <label class="mt-2 mr-2"> Stop Date: </label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" value="{{ $end_date ?? '' }}">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <button type="submit" class="btn btn-primary" onclick="filterProducts()">Filter</button>
+                        <button type="button" class="btn btn-danger" onclick="resetForm()">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -68,6 +92,22 @@
         @endif
     </div>
     <div class="ml-5 mr-5">
+        <form method="GET" action="{{ route('products.index') }}">
+            <div class="row pt-3 pb-3">
+                <div class="col-md-4 d-flex align-items-center">
+                    <label class="mr-2"> Start Date: </label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ $start_date ?? '' }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label class="mr-2"> Stop Date: </label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ $end_date ?? '' }}">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary" onclick="filterProducts()">Filter</button>
+                    <button type="button" class="btn btn-danger" onclick="resetForm()">Reset</button>
+                </div>
+            </div>
+        </form>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -106,6 +146,44 @@
 
 </body>
 </html>
+<script>
+    window.onload = function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var startDateParam = urlParams.get('start_date');
+        var endDateParam = urlParams.get('end_date');
+        var searchParam = urlParams.get('searchName');
+
+        if (startDateParam) {
+            document.getElementById('start_date').value = startDateParam;
+        }
+
+        if (endDateParam) {
+            document.getElementById('end_date').value = endDateParam;
+        }
+
+        if (searchParam) {
+            document.getElementById('searchName').value = searchParam;
+        }
+    };
+
+    function resetForm() {
+        document.getElementById('start_date').value = '';
+        document.getElementById('end_date').value = '';
+
+        document.querySelector('form').submit();
+    }
+
+    function filterProducts() {
+        var startDate = document.getElementById('start_date').value;
+        var endDate = document.getElementById('end_date').value;
+
+        if (!startDate || !endDate) {
+            alert('Please select both start and end dates.');
+            return;
+        }
+        document.querySelector('form').submit();
+    }
+</script>
 
 <style>
     .paginate {
