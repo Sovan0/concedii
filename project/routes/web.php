@@ -27,12 +27,14 @@ Route::get('/logout', [Auth::class, 'logout'])->name('logout');
 
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
-Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+//Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+Route::post('/product-create', [ProductController::class, 'productCreate'])->name('product.create-product');
 Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
 Route::put('/product/{product}/update', [ProductController::class, 'update'])->name('product.update');
 Route::delete('/product/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
 
 Route::get('/search', [ProductController::class, 'search'])->name('products.search');
-Route::get('/filter', [ProductController::class, 'index'])->name('products.index');
+Route::get('/filter', [ProductController::class, 'filteredProducts'])->name('filtered-products');
 
 Route::get('/test', [ProductController::class, 'getUserId']);
+Route::get('/date', [ProductController::class, 'getDate']);

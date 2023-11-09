@@ -28,7 +28,7 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
             </form>
-            <form method="GET" action="{{ route('products.index') }}">
+            <form method="GET" action="{{ route('filtered-products') }}">
                 <div class="row pt-3 pb-3">
                     <div class="col-md-4 d-flex align-items-center">
                         <label class="mt-2 mr-2"> Start Date: </label>
@@ -57,7 +57,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($searched_items as $product)
+            @foreach($products as $product)
                 <tr>
                     <td>{{ $product->name }}</td>
                     <td>{{  date('Y-m-d',strtotime($product->date_start)) }}</td>
@@ -87,22 +87,26 @@
         @endif
     </div>
     <div class="ml-5 mr-5">
-        <form method="GET" action="{{ route('products.index') }}">
-            <div class="row pt-3 pb-3">
-                <div class="col-md-4 d-flex align-items-center">
-                    <label class="mr-2"> Start Date: </label>
-                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ $start_date ?? '' }}">
+        <div class="row pb-3 d-flex align-items-center justify-content-center">
+            <form method="GET" action="{{ route('filtered-products') }}">
+                <div class="row pt-3 pb-3">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <label class="mt-2 mr-2"> Start Date: </label>
+                        <input type="date" id="start_date" name="start_date" class="form-control"
+                               value="{{ $start_date ?? '' }}">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <label class="mt-2 mr-2"> Stop Date: </label>
+                        <input type="date" id="end_date" name="end_date" class="form-control"
+                               value="{{ $end_date ?? '' }}">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <button type="submit" class="btn btn-primary mr-3" onclick="filterProducts()">Filter</button>
+                        <button type="button" class="btn btn-danger" onclick="resetForm()">Reset</button>
+                    </div>
                 </div>
-                <div class="col-md-4 d-flex align-items-center">
-                    <label class="mr-2"> Stop Date: </label>
-                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ $end_date ?? '' }}">
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary" onclick="filterProducts()">Filter</button>
-                    <button type="button" class="btn btn-danger" onclick="resetForm()">Reset</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -136,7 +140,8 @@
 
 <br/>
 <div class="paginate">
-    {!! $searched_items->appends(['query' => request('query')])->links() !!}
+{{--    {!! $searched_items->appends(['query' => request('query')])->links() !!}--}}
+    {{ $products->appends(['start_date' => session('start_date'), 'end_date' => session('end_date'), 'query' => request('query')])->links() }}
 </div>
 
 </body>
@@ -148,31 +153,25 @@
         var startDateParam = urlParams.get('start_date');
         var endDateParam = urlParams.get('end_date');
         var searchParam = urlParams.get('searchName');
-
         if (startDateParam) {
             document.getElementById('start_date').value = startDateParam;
         }
-
         if (endDateParam) {
             document.getElementById('end_date').value = endDateParam;
         }
-
         if (searchParam) {
             document.getElementById('searchName').value = searchParam;
         }
     };
-
     function resetForm() {
-        document.getElementById('start_date').value = '';
-        document.getElementById('end_date').value = '';
-
-        document.querySelector('form').submit();
+        var url = new URL(window.location.href);
+        url.searchParams.delete('start_date');
+        url.searchParams.delete('end_date');
+        window.location.href = url.toString();
     }
-
     function filterProducts() {
         var startDate = document.getElementById('start_date').value;
         var endDate = document.getElementById('end_date').value;
-
         if (!startDate || !endDate) {
             alert('Please select both start and end dates.');
             return;

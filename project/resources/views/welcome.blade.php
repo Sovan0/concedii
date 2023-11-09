@@ -1,7 +1,6 @@
 @extends('layout')
 @section('title', "Home Page")
 @section('content')
-
     @auth
         @if(auth()->user()->role === 'admin')
             <br>

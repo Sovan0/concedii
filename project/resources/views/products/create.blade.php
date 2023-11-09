@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Create holiday</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 @include('components.header')
 <h1>Create a Product</h1>
-<form method="post" action="/product">
+<div>
     <div>
         @if($errors->any())
             <ul>
@@ -72,13 +74,49 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Take</button>
+                <button class="btn btn-primary" id="btn-take">Take</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancel</button>
             </div>
         </div>
     </div>
-</form>
+</div>
 <script>
     window.onload = function() {
+        function saveDates(data) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/product-create",
+                type: "POST",
+                data: {
+                    data: data
+                },
+                success: function (data) {
+                    console.log("Success");
+                }
+            });
+        }
+
+
+        $("#btn-take").on("click", function() {
+            let dateStart = $("#date_start").val();
+            let dateStop = $("#date_stop").val();
+            let description = $("#description").val();
+
+            let objDate = {
+                date_start: dateStart,
+                date_stop: dateStop,
+                description: description,
+            }
+
+            saveDates(objDate);
+        });
+
         var dateStartInput = document.getElementById('date_start');
         var dateStopInput = document.getElementById('date_stop');
 
@@ -91,7 +129,7 @@
 
             if (selectedStartDay === 0 || selectedStartDay === 6 || isFreeDay(selectedStartDate)) {
                 dateStartInput.value = '';
-                dateStopInput.value = '';
+                // dateStopInput.value = '';
                 alert('1. Selection of this date is not allowed.');
                 return;
             }
