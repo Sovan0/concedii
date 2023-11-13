@@ -16,7 +16,8 @@ class Auth extends Controller
         return view('registration');
     }
 
-    function login() {
+    function login(Request $request) {
+        $request->session()->forget(['start_date', 'end_date']);
         if (Auth()->check()) {
             return redirect(route('home'));
         }
@@ -55,7 +56,8 @@ class Auth extends Controller
         return redirect(route('login'))->with("error", "Login Details are not valid.");
     }
 
-    function logout() {
+    function logout(Request $request) {
+        $request->session()->forget(['start_date', 'end_date']);
         auth()->logout();
 
         return redirect(route('login'));

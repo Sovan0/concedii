@@ -6,14 +6,14 @@
             <br>
             <span>Welcome, {{ auth()->user()->name }}</span>
             <br><br>
-            <a type="submit" class="btn btn-primary" href="{{ route('product.index') }}">Show me</a>
+            <a type="submit" class="btn btn-primary" href="{{ route('products.index') }}">Show me</a>
         @else
             <span>Welcome, {{ auth()->user()->name }}</span>
             <br />
             <br />
             <div>
-                <a type="submit" class="btn btn-primary" href="{{ route('product.index') }}">Show me</a>
-                <a type="submit" class="btn btn-primary" href="{{ route('product.create') }}">Take</a>
+                <a class="btn btn-primary" href="{{ route('products.index') }}">Show me</a>
+                <a class="btn btn-primary" href="{{ route('product.show-create-product') }}">Takes</a>
             </div>
         @endif
     @else

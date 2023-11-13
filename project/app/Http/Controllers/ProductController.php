@@ -6,12 +6,14 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
+
 //use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 //use Symfony\Component\HttpFoundation;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller{
     public function index(Request $request) {
         $query = Product::query();
 
@@ -23,18 +25,20 @@ class ProductController extends Controller
         }
 
         if (session()->has('start_date')) {
-            $query->where('date_start', '>=', session('start_date'));
+            $query->where('date_start', '>=', session('start_date'))
+                ->orderBy('date_start', 'asc');
         }
 
         if (session()->has('end_date')) {
-            $query->where('date_stop', '<=', session('end_date'));
+            $query->where('date_stop', '<=', session('end_date'))
+                ->orderBy('date_start', 'asc');
         }
 
         if (session()->has('search_query')) {
-            $query->where('name', 'LIKE', '%' . session('search_query') . '%');
+            $query->where('name', 'LIKE', '%' . session('search_query') . '%')
+                ->orderBy('date_start', 'asc');
         }
-
-        $products = $query->paginate(3);
+        $products = $query->paginate(5);
 
         return view('products.index', [
             'products' => $products,
@@ -44,35 +48,18 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create(Product $product) {
+    public function showCreateProduct(Product $product)
+    {
         return view('products.create', ['product' => $product]);
     }
 
-    public function store(Request $request) {
-        $userId = User::where('id', auth()->user()->id)->first();
-        $useName = User::where('name', auth()->user()->name)->first();
-        $data = $request->validate([
-            'user_id' => 'empty',
-            'name' => 'empty',
-            'date_start' => 'required',
-            'date_stop' => 'required',
-            'description' => 'required',
-        ]);
-
-        $data['user_id'] = $userId->id;
-        $data['name'] = $useName->name;
-
-        $newProduct = Product::create($data);
-
-//        return redirect(route('product.index'));
-        return response()->json(['error' => 0, 'message' => 'All is great']);
-    }
-
-    public function edit(Product $product) {
+    public function edit(Product $product)
+    {
         return view('products.edit', ['product' => $product]);
     }
 
-    public function update(Product $product, Request $request) {
+    public function update(Product $product, Request $request)
+    {
         $data = $request->validate([
             'name' => 'empty',
             'date_start' => 'required',
@@ -82,47 +69,68 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect(route('product.index'))->with('success', 'Product Updated Succesffully');
+        return redirect(route('products.index'))->with('success', 'Product Updated Succesffully');
     }
 
-    public function delete(Product $product) {
+    public function delete(Product $product)
+    {
         $product->delete();
 
-        return redirect(route('product.index'))->with('success', 'Product deleted Succesffully');
+        return redirect(route('products.index'))->with('success', 'Product deleted Succesffully');
     }
 
-    public function search(Request $request) {
-        $query = $request->input('query');
-        session(['search_query' => $query]);
-
-        $products = Product::whereRaw("name LIKE '%$query%'")->paginate(3);
-
-        return view('products.search', compact('products'));
-    }
-
-    public function filteredProducts(Request $request) {
+    public function filtered(Request $request) {
+        $search_name = $request->input('query');
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        session(['start_date' => $start_date, 'end_date' => $end_date]);
+        session(['search_query' => $search_name, 'start_date' => $start_date, 'end_date' => $end_date]);
 
-        $query = Product::query();
+        $productsQuery = Product::query();
 
-        if ($start_date && $end_date) {
-            $query->whereBetween('date_start', [$start_date, $end_date]);
+        if (auth()->user()->role === 'admin') {
+            if ($search_name) {
+                $productsQuery->whereRaw("name LIKE '%$search_name%'")
+                    ->orderBy('date_start', 'asc');
+            }
+
+            if ($start_date && $end_date) {
+                $productsQuery->whereBetween('date_start', [$start_date, $end_date])
+                    ->orderBy('date_start', 'asc');
+            }
+        } else {
+            $productsQuery->where('user_id', auth()->id());
+
+            if ($search_name) {
+                $productsQuery->whereRaw("name LIKE '%$search_name%'")
+                    ->orderBy('date_start', 'asc');
+            }
+
+            if ($start_date && $end_date) {
+                $productsQuery->whereBetween('date_start', [$start_date, $end_date])
+                    ->orderBy('date_start', 'asc');
+            }
         }
 
-        $products = $query->paginate(3);
+//        $orderBy = $request->get('orderBy', 'date_start');
+//        $orderDirection = $request->get('orderDirection', 'asc');
+//        $productsQuery->orderBy($orderBy, $orderDirection);
+
+        $products = $productsQuery->paginate(5);
+
+        $products->appends(['query' => $search_name, 'start_date' => $start_date, 'end_date' => $end_date]);
 
         return view('products.index', ['products' => $products]);
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         $userId = User::where('id', auth()->user()->id)->first();
         dd($userId->id);
     }
 
-    public function getDate(Request $request) {
+    public function getDate(Request $request)
+    {
         $dateStart = new Product();
         $dateStart->date_start = $request->date_start;
         dd($dateStart->date_start);
@@ -141,33 +149,43 @@ class ProductController extends Controller
         $dateStopStrtotime = strtotime($dateStopNumber);
 
         $existedProducts = Product::where('user_id', auth()->id())->get();
-        foreach ($existedProducts as $exist) {
-            $minStartDate = $exist->date_start;
-            $maxStopDate = $exist->date_stop;
-            $minStartDateNumber = date("y-m-d", strtotime($minStartDate));
-            $maxStopDateNumber = date("y-m-d", strtotime($maxStopDate));
-            $minStartDateNumberStrtotime = strtotime($minStartDateNumber);
-            $minStopDateNumberStrtotime = strtotime($maxStopDateNumber);
+        if (count($existedProducts) > 0) {
+            foreach ($existedProducts as $exist) {
+                $minStartDate = $exist->date_start;
+                $maxStopDate = $exist->date_stop;
+                $minStartDateNumber = date("y-m-d", strtotime($minStartDate));
+                $maxStopDateNumber = date("y-m-d", strtotime($maxStopDate));
+                $minStartDateNumberStrtotime = strtotime($minStartDateNumber);
+                $minStopDateNumberStrtotime = strtotime($maxStopDateNumber);
+                if (($minStartDateNumberStrtotime <= $dateStartStrtotime and $dateStartStrtotime <= $minStopDateNumberStrtotime) or ($minStartDateNumberStrtotime <= $dateStopStrtotime and $dateStopStrtotime <= $minStopDateNumberStrtotime)) {
+                    return response()->json(['error' => 1, 'message' => 'This period is already taken. Please choose another period.']);
+                } elseif (($minStartDateNumberStrtotime >= $dateStartStrtotime or $dateStartStrtotime >= $minStopDateNumberStrtotime) or ($minStartDateNumberStrtotime >= $dateStopStrtotime or $dateStopStrtotime >= $minStopDateNumberStrtotime)) {
+                    $userId = auth()->id();
+                    $userName = auth()->user()->name;
+                    $newProduct = new Product();
+                    $newProduct->user_id = $userId;
+                    $newProduct->name = $userName;
+                    $newProduct->date_start = $dateStart;
+                    $newProduct->date_stop = $dateStop;
+                    $newProduct->description = $description;
+                    $newProduct->save();
 
-//            dd($dateStartStrtotime, $dateStopStrtotime, $minStartDateNumberStrtotime, $minStopDateNumberStrtotime);
-            if(($minStartDateNumberStrtotime <= $dateStartStrtotime AND $dateStartStrtotime <= $minStopDateNumberStrtotime) OR ($minStartDateNumberStrtotime <= $dateStopStrtotime AND $dateStopStrtotime <= $minStopDateNumberStrtotime)) {
-                return "This period was took it";
-            } elseif($minStartDateNumberStrtotime >= $dateStartStrtotime OR $dateStartStrtotime >= $minStopDateNumberStrtotime OR $minStartDateNumberStrtotime >= $dateStopStrtotime OR $dateStopStrtotime >= $minStopDateNumberStrtotime) {
-                return "Success like test";
+                    return response()->json(['error' => 0, 'message' => 'Product successfully created.']);
+                }
             }
+
+        } else {
+            $userId = auth()->id();
+            $userName = auth()->user()->name;
+            $newProduct = new Product();
+            $newProduct->user_id = $userId;
+            $newProduct->name = $userName;
+            $newProduct->date_start = $dateStart;
+            $newProduct->date_stop = $dateStop;
+            $newProduct->description = $description;
+            $newProduct->save();
+
+            return response()->json(['error' => 0, 'message' => 'Product successfully created.']);
         }
-
-        dd($existedProducts);
-
-//        if(!$exitedProducts) {
-//            $dateStart = $request->date_start;
-//            $dateStop = $request->date_stop;
-//            $description = $request->description;
-//            return "test";
-//        } else {
-//            return $existElements;
-//        }
-
-//        return $request->get("data");
     }
 }

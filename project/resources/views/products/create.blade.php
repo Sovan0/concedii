@@ -38,7 +38,7 @@
                 >
             </div>
             @error('date_start')
-                <p>{{ $message }}</p>
+            <p>{{ $message }}</p>
             @enderror
         </div>
         <div class="form-group row">
@@ -52,7 +52,7 @@
                 >
             </div>
             @error('date_stop')
-                <p>{{ $message }}</p>
+            <p>{{ $message }}</p>
             @enderror
         </div>
         <div class="form-group row">
@@ -68,13 +68,13 @@
                 >
 
                 @error('description')
-                    <p>{{ $message }}</p>
+                <p>{{ $message }}</p>
                 @enderror
             </div>
         </div>
         <div class="form-group row">
             <div class="col-sm-10">
-                <button class="btn btn-primary" id="btn-take">Take</button>
+                <button class="btn btn-primary" id="btn-take">Submit</button>
             </div>
         </div>
         <div class="form-group row">
@@ -97,7 +97,12 @@
                     data: data
                 },
                 success: function (data) {
-                    console.log("Success");
+                    if (data.error === 0) {
+                        window.location.href = "/product";
+                    } else {
+                        alert("This period is already taken. Please choose another period.");
+                        // console.log("test");
+                    }
                 }
             });
         }

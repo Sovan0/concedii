@@ -140,7 +140,7 @@
 
 <br/>
 <div class="paginate">
-{{--    {!! $searched_items->appends(['query' => request('query')])->links() !!}--}}
+    {{--    {!! $searched_items->appends(['query' => request('query')])->links() !!}--}}
     {{ $products->appends(['start_date' => session('start_date'), 'end_date' => session('end_date'), 'query' => request('query')])->links() }}
 </div>
 
