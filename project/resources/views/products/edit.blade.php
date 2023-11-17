@@ -9,7 +9,8 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Edit</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 @include('components.header')
@@ -23,7 +24,7 @@
         </ul>
     @endif
 </div>
-<form method="post" action="{{ route('product.update', ['product' => $product]) }}">
+<form method="POST" action="{{ route('product.update', ['product' => $product->id]) }}">
     @csrf {{-- security reasons --}}
     @method('put')
     <div class="ml-5 mr-5">
@@ -62,7 +63,7 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary" value="Update">Update</button>
+                <button id="btn-update" type="submit" class="btn btn-primary" value="Update">Update</button>
             </div>
         </div>
         <div class="form-group row">
@@ -74,6 +75,47 @@
 </form>
 <script>
     window.onload = function() {
+        function saveDates(data) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/product/" + data.product_id,
+                type: "PUT",
+                data: {
+                    data: data
+                },
+                success: function (data) {
+                    if (data.error === 0) {
+                        window.location.href = "/product";
+                    } else {
+                        alert("This period is already taken. Please choose another period.");
+                        // console.log("test");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error: This period is already taken. Please choose another period.");
+                }
+            });
+        }
+
+        $("#btn-update").on("click", function() {
+            let dateStart = $("#date_start").val();
+            let dateStop = $("#date_stop").val();
+            let description = $("#description").val();
+            let productId = "{{ $product->id }}";
+
+            let objDate = {
+                date_start: dateStart,
+                date_stop: dateStop,
+                description: description,
+                product_id: productId,
+            }
+
+            saveDates(objDate);
+        });
+
+
         function convertDateStart(dateStart) {
             var inputDateObj = new Date(dateStart);
             var year = inputDateObj.getFullYear();

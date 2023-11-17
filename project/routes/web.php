@@ -19,6 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/bar-chart', [ProductController::class, 'barChart'])->name('bar-chart');
+
 Route::get('/registration', [Auth::class, 'registration'])->name('registration');
 Route::post('/registration', [Auth::class, 'registrationPost'])->name('registration.post');
 Route::get('/login', [Auth::class, 'login'])->name('login');
@@ -32,10 +34,7 @@ Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name(
 Route::put('/product/{product}/update', [ProductController::class, 'update'])->name('product.update');
 Route::delete('/product/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
 
-//Route::get('/search', [ProductController::class, 'search'])->name('products.search');
-//Route::get('/filter', [ProductController::class, 'filteredProducts'])->name('filtered-products');
 Route::get('/filter', [ProductController::class, 'filtered'])->name('filtered-products');
-//Route::get('/filter-user', [ProductController::class, 'filteredProductsUser'])->name('filtered-products-user');
 
 Route::get('/test', [ProductController::class, 'getUserId']);
 Route::get('/date', [ProductController::class, 'getDate']);
