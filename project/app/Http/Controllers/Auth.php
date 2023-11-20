@@ -36,7 +36,7 @@ class Auth extends Controller
         $user = User::create($data);
 
         if(!$user) {
-            return redirect(route('registration'))->with("error", "Registration failed, try again.");
+            return response()->json(['error' => 'Registration failed, try again.', 'data' => $data], 422);
         }
 
         return redirect(route('login'))->with("success", "Registration success, Login to access the app.");
