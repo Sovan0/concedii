@@ -29,7 +29,8 @@ class Auth extends Controller
         $data = $request->validate([
             'name' => 'required|regex:/^[a-zA-Z]+$/u',
             'email' => ['required', 'email', 'unique:users', 'regex:/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/'],
-            'password' => 'required',
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6'
         ]);
 
         $user = User::create($data);
